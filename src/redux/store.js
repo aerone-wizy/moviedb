@@ -1,7 +1,8 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import logger from "redux-logger";
-import rootReducer from "./root-reducer";
+import MoviesReducer from "./movies/movies.reducer";
+// import rootReducer from "./root-reducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -12,7 +13,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const store = createStore(
-  rootReducer,
+  // rootReducer,
+  MoviesReducer,
   composeEnhancers(applyMiddleware(...middlewares))
 );
 
