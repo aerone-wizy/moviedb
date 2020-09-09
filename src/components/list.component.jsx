@@ -74,7 +74,7 @@ class List extends Component {
             marginTop: 5,
           }}
         />
-        <MovieDetails movie={this.state.movie} />
+        <MovieDetails id={this.state.movie.id} />
       </div>
     ) : (
       <Space

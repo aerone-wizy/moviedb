@@ -20,10 +20,8 @@ const HomePage = () => {
 
   const handleSubmit = (value) => {
     setQuery(value);
-    // console.log(value);
   };
 
-  // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   return (
     <Tabs defaultActiveKey="1" onChange={callback} centered>
       <TabPane tab="Popular Movies" key="1">
