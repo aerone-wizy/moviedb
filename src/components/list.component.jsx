@@ -12,13 +12,13 @@ import {
 } from "../redux/movies/movies.selector";
 
 class List extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     keynum: this.props.keynum,
-  //     query: this.props.query,
-  //   };
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      keynum: this.props.keynum,
+      query: "",
+    };
+  }
 
   componentDidMount() {
     switch (this.props.keynum) {
@@ -33,20 +33,34 @@ class List extends Component {
         break;
       case "4":
         this.props.fetchMovies("search", this.props.query);
+        // this.setState({ query: this.props.query });
         break;
       default:
         break;
     }
   }
+
+  componentWillReceiveProps(props) {
+    if (props.query !== this.props.query) {
+      this.props.fetchMovies("search", props.query);
+    }
+  }
+  // componentWillUpdate() {
+  //   console.log("componentwillupdate: ", this.props.query);
+  //   if (this.state.query !== this.props.query) {
+  //     console.log("not same");
+  //     this.props.fetchMovies("search", this.props.query);
+  //     this.setState({ query: this.props.query });
+  //   }
+  // }
+
   render() {
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
     const { loading, result } = this.props;
-    console.log(result);
+
     return loading ? (
       <Spin indicator={antIcon} />
-    ) : !result ? (
-      <div>No result</div>
     ) : (
       <Space
         size="large"

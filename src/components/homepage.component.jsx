@@ -2,16 +2,15 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
-import { Tabs, Spin } from "antd";
+import { Tabs } from "antd";
 import Search from "antd/lib/input/Search";
-import { LoadingOutlined } from "@ant-design/icons";
 import List from "./list.component";
 
 import { selectIsLoading } from "../redux/movies/movies.selector";
 
 const { TabPane } = Tabs;
 
-const HomePage = ({ loading }) => {
+const HomePage = () => {
   const [key, setKey] = useState("1");
   const [query, setQuery] = useState("");
 
@@ -21,9 +20,10 @@ const HomePage = ({ loading }) => {
 
   const handleSubmit = (value) => {
     setQuery(value);
+    // console.log(value);
   };
 
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   return (
     <Tabs defaultActiveKey="1" onChange={callback} centered>
       <TabPane tab="Popular Movies" key="1">
@@ -44,13 +44,7 @@ const HomePage = ({ loading }) => {
               style={{ width: 300, marginBottom: 30 }}
             />
             <br />
-            {!query ? (
-              <div></div>
-            ) : loading ? (
-              <Spin indicator={antIcon} />
-            ) : (
-              <List keynum={key} query={query} />
-            )}
+            {!query ? <div></div> : <List keynum={key} query={query} />}
           </div>
         ) : (
           <div></div>
