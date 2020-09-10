@@ -3,7 +3,7 @@ import { Card, Space, Spin } from "antd";
 import Meta from "antd/lib/card/Meta";
 import { LoadingOutlined, CloseOutlined } from "@ant-design/icons";
 
-import { fetchMovies } from "../redux/movies/movies.actions";
+import { fetchMovies, fetchMovieDetails } from "../redux/movies/movies.actions";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
@@ -19,7 +19,7 @@ class List extends Component {
       keynum: this.props.keynum,
       query: "",
       viewDetails: false,
-      movie: {},
+      movieId: null,
     };
     this.handleViewMovie = this.handleViewMovie.bind(this);
   }
@@ -49,18 +49,17 @@ class List extends Component {
     }
   }
 
-  handleViewMovie(movie) {
-    this.setState({ viewDetails: true, movie: movie });
+  handleViewMovie(id) {
+    this.props.fetchMovieDetails(id);
+    this.setState({ viewDetails: true, movieId: id });
   }
 
   render() {
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
-    const { loading, result } = this.props;
+    const { loading, movies } = this.props;
 
-    return loading ? (
-      <Spin indicator={antIcon} />
-    ) : this.state.viewDetails ? (
+    return this.state.viewDetails ? (
       <div>
         <CloseOutlined
           onClick={() => {
@@ -74,19 +73,21 @@ class List extends Component {
             marginTop: 5,
           }}
         />
-        <MovieDetails id={this.state.movie.id} />
+        <MovieDetails id={this.state.movieId} />
       </div>
+    ) : loading ? (
+      <Spin indicator={antIcon} />
     ) : (
       <Space
         size="large"
         style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
       >
-        {result.map((movie) => (
+        {movies.map((movie) => (
           <Card
             key={movie.id}
             hoverable
             style={{ width: 240, marginBottom: 25 }}
-            onClick={() => this.handleViewMovie(movie)}
+            onClick={() => this.handleViewMovie(movie.id)}
             cover={
               <img
                 alt="poster"
@@ -110,12 +111,13 @@ class List extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  result: selectMovieData,
+  movies: selectMovieData,
   loading: selectIsLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchMovies: (category, query) => dispatch(fetchMovies(category, query)),
+  fetchMovieDetails: (movieId) => dispatch(fetchMovieDetails(movieId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);

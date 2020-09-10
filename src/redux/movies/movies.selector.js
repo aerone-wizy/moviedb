@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 
-export const selectMovieData = (state) => state.data;
+export const selectMovieData = (state) => state.movies;
+
 export const selectIsLoading = (state) => state.loading;
 
 export const selectMovieDetails = (id) => {

@@ -2,7 +2,7 @@ import MoviesActionTypes from "./movies.types";
 
 const INITIAL_STATE = {
   loading: true,
-  data: null,
+  movies: null,
   error: "",
 };
 
@@ -17,14 +17,23 @@ const MoviesReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        data: action.payload,
+        movies: action.payload,
       };
     case MoviesActionTypes.FETCH_FAILURE:
       return {
         ...state,
         loading: false,
-        data: [],
         error: action.payload,
+      };
+    case MoviesActionTypes.FETCH_MOVIE_DETAILS:
+      let movies = state.movies.map((movie) =>
+        movie.id === action.payload.id ? action.payload : movie
+      );
+
+      return {
+        ...state,
+        loading: false,
+        movies: movies,
       };
     default:
       return state;

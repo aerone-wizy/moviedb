@@ -14,6 +14,11 @@ const fetchFailure = (errorMessage) => ({
   payload: errorMessage,
 });
 
+const fetchMovieDetailsSuccess = (movie) => ({
+  type: MoviesActionTypes.FETCH_MOVIE_DETAILS,
+  payload: movie,
+});
+
 export const fetchMovies = (category, query = "") => {
   let requestString = "";
   switch (category) {
@@ -41,7 +46,45 @@ export const fetchMovies = (category, query = "") => {
       result
         .json()
         .then((data) => {
-          dispatch(fetchSuccess(data.results));
+          dispatch(
+            fetchSuccess(
+              data.results.map((movie) => ({
+                id: movie.id,
+                title: movie.title,
+                // release_date: movie.release_date,
+                // backdrop_path: movie.backdrop_path,
+                poster_path: movie.poster_path,
+                // overview: movie.overview,
+              }))
+            )
+          );
+        })
+        .catch((error) => dispatch(fetchFailure(error.message)))
+    );
+  };
+};
+
+export const fetchMovieDetails = (movieId) => {
+  return (dispatch) => {
+    dispatch(fetchRequest());
+    fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=2735ceed8da92ad1eadec0294488c1db&language=en-US`
+    ).then((result) =>
+      result
+        .json()
+        .then((movie) => {
+          console.log(movie);
+          dispatch(
+            fetchMovieDetailsSuccess({
+              id: movie.id,
+              title: movie.title,
+              release_date: movie.release_date,
+              backdrop_path: movie.backdrop_path,
+              poster_path: movie.poster_path,
+              overview: movie.overview,
+              tagline: movie.tagline,
+            })
+          );
         })
         .catch((error) => dispatch(fetchFailure(error.message)))
     );

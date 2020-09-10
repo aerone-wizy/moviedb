@@ -3,6 +3,7 @@ const MoviesActionTypes = {
   FETCH_REQUEST: "FETCH_REQUEST",
   FETCH_SUCCESS: "FETCH_SUCCESS",
   FETCH_FAILURE: "FETCH_FAILURE",
+  FETCH_MOVIE_DETAILS: "FETCH_MOVIE_DETAILS",
 };
 
 export default MoviesActionTypes;
